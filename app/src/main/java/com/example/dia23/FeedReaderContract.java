@@ -2,7 +2,6 @@ package com.example.dia23;
 
 import android.provider.BaseColumns;
 
-public class feed {
     public final class FeedReaderContract {
         // To prevent someone from accidentally instantiating the contract class,
         // make the constructor private.
@@ -15,4 +14,3 @@ public class feed {
             public static final String COLUMN_NAME_SUBTITLE = "subtitle";
         }
     }
-}
