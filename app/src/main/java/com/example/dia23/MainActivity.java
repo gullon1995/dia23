@@ -5,8 +5,10 @@ import static java.security.AccessController.getContext;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
-        FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(getContext(this));
+        FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(this);
 
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -27,5 +29,20 @@ public class MainActivity extends AppCompatActivity {
 
 // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert( FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
+
+        Cursor mCount = db.rawQuery( "SELECT COUNT(*) FROM "+FeedReaderContract.FeedEntry.TABLE_NAME, null );
+        mCount.moveToFirst();
+        int count = mCount.getInt(0);
+        mCount.close();
+        TextView t = findViewById( R.id.textView );
+
+        String texto=" ";
+        Cursor c = db.rawQuery( "SELECT * FROM "+FeedReaderContract.FeedEntry.TABLE_NAME, null );
+        while (c.moveToNext()){
+            texto+=c.getString(1)+" ";
+            texto+=c.getString( 2 )+" ";
+        }
+        c.close();
+        t.setText("tenemos "+count+"y los registros son "+texto);
     }
 }
